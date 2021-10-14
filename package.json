@@ -1,6 +1,6 @@
 {
   "name": "bojagi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "esbuild + pre builds + post builds",
   "main": "lib/index.js",
   "bin": {
