@@ -9,6 +9,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elements-x/bojagi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/elements-x/bojagi/issues"
+  },
+  "homepage": "https://github.com/elements-x/bojagi#readme",
+  "author": "allenhwkim@gmail.com",
+  "license": "MIT",
   "keywords": [
     "bundler",
     "webpack",
@@ -18,8 +28,6 @@
     "javascript",
     "es6"
   ],
-  "author": "allenhwkim@gmail.com",
-  "license": "MIT",
   "dependencies": {
     "chokidar": "^3.5.2",
     "esbuild": "^0.13.4",
