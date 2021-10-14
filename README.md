@@ -1,7 +1,7 @@
 # bojagi (esbuild + pre builds + post builds)
-bojagi is a a traditional Korean wrapping cloth for books, gifts, etc. 
-<img src="https://user-images.githubusercontent.com/1437734/137397396-907b5436-7489-4a6f-8e5a-25b111397258.png" width=200 />
+bojagi is a a traditional Korean wrapping cloth for books, gifts, etc.
 
+<img src="https://user-images.githubusercontent.com/1437734/137397396-907b5436-7489-4a6f-8e5a-25b111397258.png" width=200 />
 
 ## Features
 * start dev server instantly using esbuild
