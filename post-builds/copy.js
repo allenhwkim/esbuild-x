@@ -17,10 +17,10 @@ function copyFromTo(from, to, {tofs}) {
     } 
     if (orgfs.lstatSync(file).isDirectory()) {
       tofs.mkdirSync(target, {recursive: true});
-      konsole.log('[bombi] creating directory', target);
+      konsole.log('[bojagi] creating directory', target);
     } else {
       tofs.writeFileSync(target, orgfs.readFileSync(file));
-      konsole.log('[bombi] copying files', {from: file, to: target});
+      konsole.log('[bojagi] copying files', {from: file, to: target});
     }
   });
 }

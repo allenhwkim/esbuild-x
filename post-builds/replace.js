@@ -1,7 +1,7 @@
 const orgfs = require('fs');
 const memfs = require('memfs');
 const glob = require('glob');
-const {getHtmlToInject} = require('bombi/lib/util');
+const {getHtmlToInject} = require('bojagi/lib/util');
 
 function replace(replacements) {
   return function replace(buildOptions, buildResult) {

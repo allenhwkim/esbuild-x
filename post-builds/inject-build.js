@@ -1,7 +1,7 @@
 const orgfs = require('fs');
 const memfs = require('memfs');
 const path = require('path');
-const {getHtmlToInject} = require('bombi/lib/util');
+const {getHtmlToInject} = require('bojagi/lib/util');
 
 module.exports  = function injectBuild(buildOptions, buildResult) {
   const fs = buildOptions.write ? orgfs : memfs;
