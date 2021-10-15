@@ -10,7 +10,8 @@ module.exports = function runStaticServer(options, esbuildResult) {
   http.createServer(function (req, res) {
     let filePath = new URL(`file://${req.url}`).pathname;
     filePath = path.join(options.outdir, filePath);
-    fs.lstatSync(filePath).isDirectory() && (filePath = path.join(filePath, 'index.html'));
+    fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory() &&
+      (filePath = path.join(filePath, 'index.html'));
 
     if (fs.existsSync(filePath)) {
       const contents = fs.readFileSync(filePath);
