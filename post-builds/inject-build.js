@@ -1,10 +1,9 @@
-const orgfs = require('fs');
-const memfs = require('memfs');
 const path = require('path');
 const {getHtmlToInject} = require('bojagi/lib/util');
 
+
 module.exports  = function injectBuild(buildOptions, buildResult) {
-  const fs = buildOptions.write ? orgfs : memfs;
+  const fs = buildOptions.write ? require('fs') : require('memfs');
   const htmlToInject = getHtmlToInject(buildResult);
   const wsHtml = buildOptions.port ? `\n<script>setTimeout(_ => {` +
         `var ws = new WebSocket('ws://localhost:${buildOptions.port + 1}');` +

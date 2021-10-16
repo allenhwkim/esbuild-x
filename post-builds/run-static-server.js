@@ -1,13 +1,12 @@
-const orgfs = require('fs');
-const memfs = require('memfs');
 const path = require('path');
 const http = require('http');
 const { konsole } = require('../lib/util.js');
 
 module.exports = function runStaticServer(options, esbuildResult) {
-  const fs = options.write ? orgfs : memfs;
 
   http.createServer(function (req, res) {
+    const fs = options.write ? require('fs') : require('memfs');
+
     let filePath = new URL(`file://${req.url}`).pathname;
     filePath = path.join(options.outdir, filePath);
     fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory() &&
