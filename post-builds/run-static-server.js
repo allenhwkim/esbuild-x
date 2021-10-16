@@ -19,13 +19,14 @@ module.exports = function runStaticServer(options, esbuildResult) {
       const foundKey = Object.keys(options.notFoundHandler)
         .find(re => req.url.match(new RegExp(re)));
       if (foundKey) {
-        konsole.info('\n[serve]', 404, req.url, '->', options.notFoundHandler[foundKey] );
+        konsole.info('\n[bojagi serve]', 404, req.url, '->', options.notFoundHandler[foundKey] );
         const redirPath = path.join(options.outdir, options.notFoundHandler[foundKey]);
         const contents = fs.readFileSync(redirPath, {encoding: 'utf8'});
         res.end(contents);
       } 
     }
 
-    konsole.info(`[bojagi post-builds] http static web server running, http://localhost:${options.port}`);
   }).listen(options.port);
+
+  konsole.info(`[bojagi post-builds] http static web server running, http://localhost:${options.port}`);
 }

@@ -33,7 +33,6 @@ module.exports = function copy(fromTos) {
     fromTos.forEach(strExpr => {
       const froms = strExpr.split(' ').slice(0, -1);
       const to = strExpr.split(' ').slice(-1)[0];
-      const froms = strExpr.split(' ').slice(0, -1);
       froms.forEach( from => copyFromTo(from, to, {tofs}) );
       konsole.info(`[bojagi post-builds] copying files ${froms} -> ${to}`);
     })

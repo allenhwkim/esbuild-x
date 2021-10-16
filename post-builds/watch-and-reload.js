@@ -1,6 +1,6 @@
 const copy = require('bojagi/post-builds/copy');
 const esbuild = require('esbuild');
-const { konsole } = require('../lib/util');
+const { konsole, getEsbuildOptions } = require('../lib/util');
 const wsClients = require('./websocket-clients');
 
 module.exports = function runWatchAndReload(watchDir) {
@@ -12,7 +12,7 @@ module.exports = function runWatchAndReload(watchDir) {
       .on('all', async (event, path) => {
         const fs = options.write ? require('fs') : require('memfs');
         // const fs = require('fs');
-        konsole.info(`[serve] file ${event} detected in ${path}`);
+        konsole.info(`[bojagi serve] file ${event} detected in ${path}`);
 
         // rebuild
         const esbuildOptions = getEsbuildOptions(options);
