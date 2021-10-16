@@ -1,5 +1,5 @@
 const glob = require('glob');
-const {getHtmlToInject} = require('bojagi/lib/util');
+const {konsole} = require('../lib/util');
 
 function replace(replacements) {
   return function replace(buildOptions, buildResult) {
@@ -10,6 +10,7 @@ function replace(replacements) {
           .replace(repl.regex, repl.replace);
         fs.writeFileSync(file, contents);
       });
+      konsole.info(`[bojagi post-builds] replaced ${repl.rege} to ${repl.replace} in ${repl.match}`);
     })
   };
 }

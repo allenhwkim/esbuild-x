@@ -7,6 +7,7 @@ function copyFromTo(from, to, {tofs}) {
   const wildcard = from.indexOf('*') !== -1;
   const pattern = !wildcard && fs.lstatSync(from).isDirectory() ? `${from}/**/*` : from;
   const fromDirname = from.match(/\//) ? path.dirname(from.replace(/\/\*.*/, '/wildcard')) : from;
+
   glob.sync(pattern).forEach(file => {
     const target = file.replace(fromDirname, to);
     const targetDir= path.dirname(target);
@@ -32,8 +33,9 @@ module.exports = function copy(fromTos) {
     fromTos.forEach(strExpr => {
       const froms = strExpr.split(' ').slice(0, -1);
       const to = strExpr.split(' ').slice(-1)[0];
-      konsole.log({strExpr, froms, to});
+      const froms = strExpr.split(' ').slice(0, -1);
       froms.forEach( from => copyFromTo(from, to, {tofs}) );
+      konsole.info(`[bojagi post-builds] copying files ${froms} -> ${to}`);
     })
   }
 }

@@ -1,6 +1,5 @@
 const path = require('path');
-const {getHtmlToInject} = require('bojagi/lib/util');
-
+const {getHtmlToInject, konsole} = require('../lib/util');
 
 module.exports  = function injectBuild(buildOptions, buildResult) {
   const fs = buildOptions.write ? require('fs') : require('memfs');
@@ -14,4 +13,5 @@ module.exports  = function injectBuild(buildOptions, buildResult) {
   const contents = fs.readFileSync(indexPath, {encoding: 'utf8'})
     .replace(/<\/body>/, `${htmlToInject}${wsHtml}\n</body>`);
   fs.writeFileSync(indexPath, contents);
+  konsole.info(`[bojagi post-builds] inject build script into ${indexPath}`);
 }

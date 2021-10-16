@@ -26,5 +26,6 @@ module.exports = function runStaticServer(options, esbuildResult) {
       } 
     }
 
+    konsole.info(`[bojagi post-builds] http static web server running, http://localhost:${options.port}`);
   }).listen(options.port);
 }

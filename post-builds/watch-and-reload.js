@@ -1,10 +1,11 @@
 const copy = require('bojagi/post-builds/copy');
 const esbuild = require('esbuild');
-const {konsole, getEsbuildOptions} = require('../lib/util');
+const { konsole } = require('../lib/util');
 const wsClients = require('./websocket-clients');
 
 module.exports = function runWatchAndReload(watchDir) {
   // watch file change and broadcast it to web browsers
+
   return function runWatchAndReload(options, buildResult) { 
 
     require('chokidar').watch(watchDir, {ignoreInitial: true, interval: 1000})
@@ -32,5 +33,8 @@ module.exports = function runWatchAndReload(watchDir) {
         // reload
         wsClients.forEach(wsClient => wsClient.send('reload'));
       });
+
+    konsole.info(`[bojagi post-builds] watching changes on ${watchDir}`);
   }
+
 }
