@@ -18,71 +18,18 @@ $ bojagi build
 $ bojagi serve
 ```
 
-### Config example(e.g. bojagi.config.js)
+## Config 
+* all esbuild options are allowed, https://esbuild.github.io/api/#build-api.  
+* preBuilds: an array of function to be executed before esbuild.build()  
+  a pre build function takes esbuild option as a parameter
+* postBuilds: an array of function to run after esbuild.build().  
+  a post build function takes esbuild option and esbuild results as parameters.
+* port: a port number to run dev server with `bojagi serve`
+* notFoundHandler: an object to redirect when dev server meets 404.  
+  This can be used for S.P.A. application history api fallback.  
+  e.g., `{ '^/(component|tool)': 'index.html' }`
+
+A full example can be found here.
 https://github.com/elements-x/elements-x/blob/master/bojagi.config.js
-```
-const glob = require('glob');
-const open  = require('open');
-const { rimraf } = require('bojagi/lib/util');
 
-const { minifyHtmlPlugin, minifyCssPlugin } = require('bojagi/esbuild-plugins');
-const {
-  copy, 
-  injectBuild, 
-  replace, 
-  runWebsocketServer, 
-  runStaticServer, 
-  watchAndReload
-} = require('bojagi/post-builds');
-
-const config = {};
-config.build = {
-  entryPoints: ['src/main.js'],
-  plugins: [minifyCssPlugin, minifyHtmlPlugin],
-  preBuilds: [ function clear() {rimraf('dist')} ], 
-  postBuilds: [ 
-    copy('src/assets src/components src/tools src/*.html src/*.css public/* dist'),
-    injectBuild,
-    replace([{match: 'index.html', regex: /BUILD_DATE/, replace: new Date()}]),
-  ]
-};
-
-config.serve = {
-  entryPoints: ['src/main.js'],
-  loader: { '.html': 'text', '.css': 'text' },
-  entryNames: '[name]',
-  postBuilds: [
-    copy('src/assets src/components src/tools src/*.html src/*.css public/* dist'),
-    injectBuild,
-    replace([{match: 'index.html', regex: /BUILD_DATE/, replace: new Date()}]),
-    runStaticServer,
-    runWebsocketServer,
-    watchAndReload(['src', 'lib']),
-    function openBrowser() { open(`http://localhost:8080`); }
-  ]
-};
-
-const entryPoints = glob.sync('lib/*/index.js').reduce( (ret, el) => {
-  ret[el.split('/')[1]] = el;
-  return ret;
-}, {});
-config.lib = {
-  entryPoints,
-  entryNames: '[name]',
-  minify: false,
-  format: 'esm',
-  sourcemap: false,
-  loader: { '.html': 'text', '.css': 'text' },
-  preBuilds: [ _ =>  rimraf('dist') ], 
-  postBuilds: [copy('lib/index.js dist')],
-};
-
-config.libmin = {
-  entryPoints: ['lib/index.js'],
-  entryNames: 'elements-x.min',
-  legalComments: 'none',
-  plugins: [minifyCssPlugin, minifyHtmlPlugin]
-};
-
-module.exports = config;
 ```
