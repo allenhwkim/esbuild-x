@@ -36,7 +36,7 @@ $ bojagi serve
   a post build function takes esbuild option and esbuild results as parameters.
   ```
   config = {
-    build: {
+    serve: {
       entryPoints: ['src/main.js'],
       ...
       postBuilds: [ function(options, buildResult) { // run a websocket server
