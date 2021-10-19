@@ -1,0 +1,1 @@
+- Create `create-bojagi` repo. similar to `create-init` app.
