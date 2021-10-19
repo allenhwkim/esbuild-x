@@ -16,10 +16,22 @@ bojagi is a a traditional Korean wrapping cloth for books, gifts, etc.
 $ npm i bojagi -D
 $ bojagi build
 $ bojagi serve
+$ bojagi <key> # any key in bojagi.config.js
 ```
 
 ## Config 
-* all esbuild options are allowed, https://esbuild.github.io/api/#build-api.  
+* all esbuild options are allowed, https://esbuild.github.io/api/#build-api.
+  ```
+  module.exports = {
+    build: {
+      entryPoints: ['src/main.js'],
+      entryNames: '[name]-[hash]',
+      outdir: 'dist',
+      bundle: true,
+      ...
+    }
+  }
+  ```
 * preBuilds: an array of function to be executed before esbuild.build()  
   a pre build function takes esbuild option as a parameter
   ```
