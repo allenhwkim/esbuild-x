@@ -1,7 +1,15 @@
 const copy = require('bojagi/post-builds/copy');
 const esbuild = require('esbuild');
-const { konsole, getEsbuildOptions } = require('../lib/util');
+const { konsole } = require('../lib/util');
 const wsClients = require('./websocket-clients');
+
+// returns options for esbuild only from all possible options by excluding keys
+function getEsbuildOptions(allOptions) {
+  const excludes = `config,port,notFoundHandler,preBuilds,postBuilds,open`.split(',');
+  const esbuildOptions = {...allOptions};
+  excludes.forEach(key => delete esbuildOptions[key]);
+  return esbuildOptions;
+}
 
 module.exports = function runWatchAndReload(watchDir) {
   // watch file change and broadcast it to web browsers
