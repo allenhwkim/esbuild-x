@@ -1,8 +1,6 @@
 module.exports = {
   copy: require('./copy'),
-  injectBuild: require('./inject-build'),
-  replace: require('./replace'),
+  injectEsbuildResult: require('./inject-esbuild-result'),
   runStaticServer: require('./run-static-server'),
-  runWebsocketServer: require('./run-websocket-server'),
   watchAndReload: require('./watch-and-reload'),
 }

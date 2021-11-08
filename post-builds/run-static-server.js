@@ -2,31 +2,33 @@ const path = require('path');
 const http = require('http');
 const { konsole } = require('../lib/util.js');
 
-module.exports = function runStaticServer(options, esbuildResult) {
+// dir
+// options
+// - port
+// - notFound: {match: /^\/(component|tool|css)/, serve: 'dist/index.html'}
+module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
+  fs = fs || require('fs');
+  port = port || 9100;
+  notFound = notFound || {match: /.*$/, serve: path.join(dir, 'index.html')};
 
-  http.createServer(function (req, res) {
-    const fs = options.write ? require('fs') : require('memfs');
+  return function(options, esbuildResult) {
+    const server = http.createServer(function (req, res) {
+      let filePath = new URL(`file://${req.url}`).pathname;
+      filePath = path.join(dir, filePath);
+      fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory() &&
+        (filePath = path.join(filePath, 'index.html'));
 
-    let filePath = new URL(`file://${req.url}`).pathname;
-    filePath = path.join(options.outdir, filePath);
-    fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory() &&
-      (filePath = path.join(filePath, 'index.html'));
-
-    if (fs.existsSync(filePath)) {
-      const contents = fs.readFileSync(filePath);
-      res.end(contents);
-    } else { // 404
-      const foundKey = Object.keys(options.notFoundHandler)
-        .find(re => req.url.match(new RegExp(re)));
-      if (foundKey) {
-        konsole.info('\n[bojagi serve]', 404, req.url, '->', options.notFoundHandler[foundKey] );
-        const redirPath = path.join(options.outdir, options.notFoundHandler[foundKey]);
-        const contents = fs.readFileSync(redirPath, {encoding: 'utf8'});
+      if (fs.existsSync(filePath)) {
+        const contents = fs.readFileSync(filePath);
         res.end(contents);
-      } 
-    }
-
-  }).listen(options.port);
-
-  konsole.info(`[bojagi post-builds] http static web server running, http://localhost:${options.port}`);
+      } else if (req.url.match(notFound.match)) {
+        konsole.info('\n[bojagi serve]', 404, req.url, '->', notFound.serve );
+        const contents = fs.readFileSync(notFound.serve, {encoding: 'utf8'});
+        res.end(contents);
+      }
+    })
+    server.listen(port);
+    konsole.info(`[bojagi post-builds] http static server running, http://localhost:${port}`);
+    return server;
+  };
 }

@@ -7,7 +7,7 @@
     "bojagi": "lib/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -38,5 +38,8 @@
     "ws": "^8.2.3",
     "yargs": "^17.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "axios": "^0.24.0",
+    "jest": "^27.3.1"
+  }
 }
