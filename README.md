@@ -17,8 +17,12 @@ $ bojagi <section> # any section in bojagi.config.js
 ```
 
 ## Usage as node module
-TODO...
-
+```
+const bojagi = require('bojagi');
+bojagi.build(options).then(esbuildResult => {
+  ...
+})
+```
 
 ## bojagi.config.js example
 * all esbuild options are allowed, https://esbuild.github.io/api/#build-api.
