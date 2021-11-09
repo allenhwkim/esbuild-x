@@ -11,6 +11,7 @@ beforeEach( async () => {});
 afterEach( async () => { });
 
 test('bojagi.build', async () => {
+  const preBuildFunc = jest.fn();
   const postBuildFunc = jest.fn();
   const result = await bojagi.build({
       entryPoints: ['test/test-files/main.js'],
@@ -21,6 +22,7 @@ test('bojagi.build', async () => {
       write: false,
       metafile: true,
       plugins: [bojagi.esbuildPlugins.minifyHtmlPlugin],
+      preBuilds: [preBuildFunc],
       postBuilds: [postBuildFunc]
     });
   
@@ -29,7 +31,8 @@ test('bojagi.build', async () => {
   expect(bojagi.esbuildPlugins).toBeTruthy();
   expect(bojagi.postBuilds).toBeTruthy();
 
-  // bojagi.build must calls postBuild functions
+  // bojagi.build must calls preBuild and postBuild functions
+  expect(preBuildFunc).toHaveBeenCalled();
   expect(postBuildFunc).toHaveBeenCalled();
 
   // bojagi.build must run esbuild.build

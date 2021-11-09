@@ -26,6 +26,22 @@ bojagi.build(options).then(esbuildResult => {
 
 ## bojagi.config.js example
 * all esbuild options are allowed, https://esbuild.github.io/api/#build-api.
+* preBuilds: an array of function to run before esbuild.build()
+  Example
+  ```
+  module.exports = {
+    build: {
+      entryPoints: ['src/main.js'],
+      entryNames: '[name]-[hash]',
+      outdir: 'dist',
+      bundle: true,
+      ...
+      preBuilds: [ function clear() {rimraf('dist')} ], 
+      ...
+    }
+  }
+  ```
+
 * postBuilds: an array of function to run after esbuild.build().  
   a post build function takes two parameters internally
     * esbuild option 
