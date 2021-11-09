@@ -1,5 +1,6 @@
 const path = require('path');
 const http = require('http');
+const nodefs = require('fs');
 const { konsole } = require('../lib/util.js');
 
 // dir
@@ -12,6 +13,9 @@ module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
   notFound = notFound || {match: /.*$/, serve: path.join(dir, 'index.html')};
 
   return function(options, esbuildResult) {
+    /**
+     * run the static server
+     */
     const server = http.createServer(function (req, res) {
       let filePath = new URL(`file://${req.url}`).pathname;
       filePath = path.join(dir, filePath);
@@ -26,7 +30,7 @@ module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
         const contents = fs.readFileSync(notFound.serve, {encoding: 'utf8'});
         res.end(contents);
       }
-    })
+    });
     server.listen(port);
     konsole.info(`[bojagi post-builds] http static server running, http://localhost:${port}`);
     return server;

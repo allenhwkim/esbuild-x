@@ -108,19 +108,12 @@ bojagi.build(options).then(esbuildResult => {
 
 ### injectEsbuildResult
 Inject esbuild compile output to index.html.
-It accepts a websocket port number as a parameter.
-When a websocket port is given, it starts a websocket server and listens to websocket 
-to reload the page when a file is updated.
 
 e.g. 
 ```
   <!-- your index.html -->
   <script src="main.js"></script>
   <link rel="stylesheet" href="style.css" />
-  <script>setTimeout(_ => { 
-    var ws = new WebSocket('ws://localhost:9000');
-    ws.onmessage = e => window.location.reload();
-  }, 1000)</script>
   </body>
 </html>
 ```
@@ -131,9 +124,7 @@ const bojagi = require('bojagi');
 const {injectEsbuildResult} = bojagi.postBuilds;
 const options = { 
   entryPoints: ['src/main.js']
-  postBuilds: [
-    injectEsbuildResult(9000) // 9000 is a websocket port number
-  ]
+  postBuilds: [ injectEsbuildResult() ]
 }
 bojagi.build(options).then(esbuildResult => {
   ...
@@ -145,7 +136,7 @@ Run a static http server for a given directory. Two parameters accepted
 * dir: a directory to run a static http server. required.
 * options (optional)
   * fs: file system to run a static server. e.g. `require('memfs')`. Default `require('fs')`. 
-  * port: port number for a server. Default 9100
+  * port: port number to run a static server. Default 9100
   * notFound: 404 redirection logic.
     e.g. `{match: /.*$/, serve: path.join(dir, 'index.html')}`
 
@@ -156,7 +147,11 @@ const {runStaticServer} = bojagi.postBuilds;
 const options = { 
   entryPoints: ['src/main.js']
   postBuilds: [
-    runStaticServer('src', {fs: require('memfs')}) 
+    runStaticServer('src', {
+      fs: require('memfs'), 
+      port: 9100, 
+      notFound: {match: /.*$/, serve: path.join(dir, 'index.html')
+    }}) 
   ]
 }
 bojagi.build(options).then(esbuildResult => {
@@ -165,8 +160,12 @@ bojagi.build(options).then(esbuildResult => {
 ```
 
 ### watchAndReload
-Watch updates in a given directory, and rebuild and reload when a change happens
-* dir: a directory to watch
+Watch the given directory, and rebuild and reload when a file change happens
+It also statts a websocket server to reload browser client when file change happens.
+
+Parameters: 
+  * dir: a directory to watch
+  * websocket port: Optional, Default 9110. If null, it does not run websocket server
 
 Example
 ```
@@ -175,7 +174,7 @@ const {watchAndReload} = bojagi.postBuilds;
 const options = { 
   entryPoints: ['src/main.js']
   postBuilds: [
-    watchAndReload('src') 
+    watchAndReload('src', 9110) 
   ]
 }
 bojagi.build(options).then(esbuildResult => {
