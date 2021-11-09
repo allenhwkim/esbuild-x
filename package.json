@@ -1,6 +1,6 @@
 {
   "name": "bojagi",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "esbuild + post builds(copy files, inject html, run static server, and watch files)",
   "main": "lib/index.js",
   "bin": {
