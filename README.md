@@ -1,5 +1,5 @@
 # esbuild-x 
-[esbuid](https://esbuild.github.io/) extended
+[esbuid](https://esbuild.github.io/) extended; esbuild + pre builds + post builds
 
 ## Features
 * All esbuild features
