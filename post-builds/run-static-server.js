@@ -28,7 +28,6 @@ module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
       } else if (req.url.match(notFound.match)) {
         konsole.info('\n[bojagi serve]', 404, req.url, '->', notFound.serve );
         const notFoundServeFilePath = path.join(dir, notFound.serve);
-console.log({notFoundServeFilePath})
         const contents = fs.readFileSync(notFoundServeFilePath, {encoding: 'utf8'});
         res.end(contents);
       }
