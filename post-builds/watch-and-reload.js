@@ -25,7 +25,7 @@ function runWebSocketServer(port, indexPath, fs) {
     `}, 1000)</script>`;
   const wss = new WebSocketServer({port});
   wss.on('connection', socket => wsClients.push(socket));
-  konsole.info(`[bojagi post-builds] websocket server running on ${port}`);
+  konsole.info(`[esbuild-x post-builds] websocket server running on ${port}`);
 
   const contents = fs.readFileSync(indexPath, {encoding: 'utf8'})
     .replace(/<\/body>/, `${wsHtml}\n</body>`);
@@ -34,7 +34,7 @@ function runWebSocketServer(port, indexPath, fs) {
   return wss; 
 }
 
-module.exports = function runWatchAndReload(watchDir, websocketPort = 9100) {
+module.exports = function runWatchAndReload(watchDir, websocketPort = 9110) {
   // watch file change and broadcast it to web browsers
 
   return function runWatchAndReload(options, buildResult) { 
@@ -54,7 +54,7 @@ module.exports = function runWatchAndReload(watchDir, websocketPort = 9100) {
       interval: 1000
     });
     watcher.on('all', async (event, filePath) => {
-      konsole.info(`[bojagi serve] file ${event} detected in ${filePath}`);
+      konsole.info(`[esbuild-x serve] file ${event} detected in ${filePath}`);
 
       // rebuild
       const esbuildOptions = getEsbuildOptions(options);
@@ -84,12 +84,12 @@ module.exports = function runWatchAndReload(watchDir, websocketPort = 9100) {
         }
 
         fs.writeFileSync(commonPath + destPath, contents);
-        konsole.info('[bojagi watch-and-reload]', filePath, '>', destPath )
+        konsole.info('[esbuild-x watch-and-reload]', filePath, '>', destPath )
       }
     
       // broadcast to web browsers
       wsClients.forEach(wsClient => wsClient.send('reload'));
-      konsole.info(`[bojagi post-builds] watching changes on ${watchDir}`);
+      konsole.info(`[esbuild-x post-builds] watching changes on ${watchDir}`);
     });
 
     return {watcher, wss};

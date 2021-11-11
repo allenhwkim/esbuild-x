@@ -17,7 +17,7 @@ function copyFromTo(from, to, {fs, replacements}) {
     } 
     if (nodefs.lstatSync(file).isDirectory()) {
       fs.mkdirSync(target, {recursive: true});
-      konsole.log('[bojagi] creating directory', target);
+      konsole.log('[esbuild-x] creating directory', target);
     } else {
       // if match to replace, run replace
       const replacement = replacements.find(repl => repl.match.test(file));
@@ -28,7 +28,7 @@ function copyFromTo(from, to, {fs, replacements}) {
       } else {
         fs.writeFileSync(target, nodefs.readFileSync(file));
       }
-      konsole.log('[bojagi] copying files', {from: file, to: target});
+      konsole.log('[esbuild-x] copying files', {from: file, to: target});
     }
   });
 }
@@ -44,7 +44,7 @@ module.exports = function copy(fromTos, {replacements} = {}) {
       const froms = strExpr.split(' ').slice(0, -1);
       const to = strExpr.split(' ').slice(-1)[0];
       froms.forEach( from => copyFromTo(from, to, {fs, replacements}) );
-      konsole.info(`[bojagi post-builds] copying files ${froms} -> ${to}`);
+      konsole.info(`[esbuild-x post-builds] copying files ${froms} -> ${to}`);
     })
   }
 }

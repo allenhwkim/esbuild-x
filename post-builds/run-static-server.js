@@ -26,14 +26,14 @@ module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
         const contents = fs.readFileSync(filePath);
         res.end(contents);
       } else if (req.url.match(notFound.match)) {
-        konsole.info('\n[bojagi serve]', 404, req.url, '->', notFound.serve );
+        konsole.info('\n[esbuild-x serve]', 404, req.url, '->', notFound.serve );
         const notFoundServeFilePath = path.join(dir, notFound.serve);
         const contents = fs.readFileSync(notFoundServeFilePath, {encoding: 'utf8'});
         res.end(contents);
       }
     });
     server.listen(port);
-    konsole.info(`[bojagi post-builds] http static server running, http://localhost:${port}`);
+    konsole.info(`[esbuild-x post-builds] http static server running, http://localhost:${port}`);
     return server;
   };
 }

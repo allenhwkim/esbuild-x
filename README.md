@@ -1,30 +1,31 @@
-# bojagi (esbuild + post builds)
-bojagi is a a traditional Korean wrapping cloth for books, gifts, etc.  
-<img src="https://user-images.githubusercontent.com/1437734/137397396-907b5436-7489-4a6f-8e5a-25b111397258.png" width=200 />
+# esbuild-x 
+[esbuid](https://esbuild.github.io/) extended
 
 ## Features
-* start dev server instantly using esbuild
-* support single page application 404 fallback page
-* reload browser when a file is updated
-* customizable post build functions
+* All esbuild features
+* plus, starting dev server instantly using esbuild
+* plus, supporting S.P.A with 404 fallback feature
+* plus, reloading browser when a file is updated
+* plus, accepting custom pre build functions
+* plus, accepting custom post build functions
 
 ## Usage as command
 ```
-$ npm i bojagi -D
-$ bojagi build
-$ bojagi serve
-$ bojagi <section> # any section in bojagi.config.js
+$ npm i esbuild-x -D
+$ esbuild-x build
+$ esbuild-x serve
+$ esbuild-x <any> # any section in esbuild-x.config.js
 ```
 
 ## Usage as node module
 ```
-const bojagi = require('bojagi');
-bojagi.build(options).then(esbuildResult => {
+const esbuildX = require('esbuild-x');
+esbuildX.build(options).then(esbuildResult => {
   ...
 })
 ```
 
-## bojagi.config.js example
+## esbuild-x.config.js example
 * all esbuild options are allowed, https://esbuild.github.io/api/#build-api.
 * preBuilds: an array of function to run before esbuild.build()
   Example
@@ -64,7 +65,7 @@ bojagi.build(options).then(esbuildResult => {
   }
   ```
 A full example can be found here.
-https://github.com/elements-x/elements-x/blob/master/bojagi.config.js
+https://github.com/elements-x/elements-x/blob/master/esbuild-x.config.js
 
 ## built-in esbuild plugins
 
@@ -82,13 +83,13 @@ console.log(html + css);
 
 Example
 ```
-const bojagi = require('bojagi');
-const { minifyCssPlugin, minifyHtmlPlugin } = bojagi.esbuildPlugins;
+const esbuildX = require('esbuild-x');
+const { minifyCssPlugin, minifyHtmlPlugin } = esbuildX.plugins;
 const options = {
   entryPoints: ['src/main.js'],
   plugins: [minifyCssPlugin, minifyHtmlPlugin]
 };
-bojagi.build(options).then(esbuildResult => {
+esbuildX.build(options).then(esbuildResult => {
   ...
 });
 ```
@@ -107,8 +108,8 @@ copy files to a directory by replacing file contents
 
 Example
 ```
-const bojagi = require('bojagi');
-const {copy} = bojagi.postBuilds
+const esbuildX = require('esbuild-x');
+const {copy} = esbuildX.postBuilds
 const options = { 
   entryPoints: ['src/main.js']
   postBuilds: [
@@ -117,7 +118,7 @@ const options = {
     })
   ]
 }
-bojagi.build(options).then(esbuildResult => {
+esbuildX.build(options).then(esbuildResult => {
   ...
 })
 ```
@@ -136,13 +137,13 @@ e.g.
 
 Example
 ```
-const bojagi = require('bojagi');
-const {injectEsbuildResult} = bojagi.postBuilds;
+const esbuildX = require('esbuild-x');
+const {injectEsbuildResult} = esbuildX.postBuilds;
 const options = { 
   entryPoints: ['src/main.js']
   postBuilds: [ injectEsbuildResult() ]
 }
-bojagi.build(options).then(esbuildResult => {
+esbuildX.build(options).then(esbuildResult => {
   ...
 })
 ```
@@ -158,8 +159,8 @@ Run a static http server for a given directory. Two parameters accepted
 
 Example
 ```
-const bojagi = require('bojagi');
-const {runStaticServer} = bojagi.postBuilds;
+const esbuildX = require('esbuild-x');
+const {runStaticServer} = esbuildX.postBuilds;
 const options = { 
   entryPoints: ['src/main.js']
   postBuilds: [
@@ -170,7 +171,7 @@ const options = {
     }}) 
   ]
 }
-bojagi.build(options).then(esbuildResult => {
+esbuildX.build(options).then(esbuildResult => {
   ...
 })
 ```
@@ -185,15 +186,15 @@ Parameters:
 
 Example
 ```
-const bojagi = require('bojagi');
-const {watchAndReload} = bojagi.postBuilds;
+const esbuildX = require('esbuild-x');
+const {watchAndReload} = esbuildX.postBuilds;
 const options = { 
   entryPoints: ['src/main.js']
   postBuilds: [
     watchAndReload('src', 9110) 
   ]
 }
-bojagi.build(options).then(esbuildResult => {
+esbuildX.build(options).then(esbuildResult => {
   ...
 })
 ```

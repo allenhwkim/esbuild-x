@@ -1,10 +1,17 @@
 const WebSocket = require('ws');
 const { fs, vol } = require('memfs');
 const path = require('path');
+const killport = require('kill-port');
+
 const { watchAndReload } = require('../../post-builds');
 const wsClients = require('../../post-builds/websocket-clients');
 const {konsole} = require('../../lib/util');
 konsole.LOG_LEVEL = 'error';
+
+const wsPort = 9110;
+beforeAll(async () => {
+  await killport(wsPort);
+});
 
 test('post-builds - watchAndReload', done => {
   // path is relative to main directory, which package.json
@@ -51,16 +58,16 @@ test('post-builds - watch and reload - websocket', done => {
   fs.mkdirSync('dist', {recursive: true});
   fs.writeFileSync( 'dist/index.html', `<html><head></head><body></body></html>`);
 
-  const {watcher, wss}  = watchAndReload(watchDir, 9010, fs)(buildOptions);
+  const {watcher, wss}  = watchAndReload(watchDir, wsPort, fs)(buildOptions);
   setTimeout(_ => { // to avoid initial changes detection
     // then verify the result
     const result = vol.toJSON();
     const outPath = path.resolve(path.join('dist', 'index.html'));
-    expect(result[outPath]).toContain('ws://localhost:9010');
+    expect(result[outPath]).toContain(`ws://localhost:${wsPort}`);
     expect(result[outPath]).toContain('ws.onmessage = e => window.location.reload()');
 
     expect(wsClients.length).toBe(0);
-    const ws = new WebSocket('ws://localhost:9010'); // a websocket client
+    const ws = new WebSocket(`ws://localhost:${wsPort}`); // a websocket client
     ws.on('open', _ => expect(wsClients.length).toBe(1))
 
     setTimeout(_ =>  {

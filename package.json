@@ -1,22 +1,22 @@
 {
-  "name": "bojagi",
+  "name": "esbuild-x",
   "version": "0.2.7",
   "description": "esbuild + post builds(copy files, inject html, run static server, and watch files)",
   "main": "lib/index.js",
   "bin": {
-    "bojagi": "lib/cli.js"
+    "esbuild-x": "lib/cli.js"
   },
   "scripts": {
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elements-x/bojagi.git"
+    "url": "git+https://github.com/elements-x/esbuild-x.git"
   },
   "bugs": {
-    "url": "https://github.com/elements-x/bojagi/issues"
+    "url": "https://github.com/elements-x/esbuild-x/issues"
   },
-  "homepage": "https://github.com/elements-x/bojagi#readme",
+  "homepage": "https://github.com/elements-x/esbuild-x#readme",
   "author": "allenhwkim@gmail.com",
   "license": "MIT",
   "keywords": [
@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "axios": "^0.24.0",
-    "jest": "^27.3.1"
+    "jest": "^27.3.1",
+    "kill-port": "^1.6.1"
   }
 }
