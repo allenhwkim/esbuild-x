@@ -10,7 +10,7 @@ const { konsole } = require('../lib/util.js');
 module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
   fs = fs || require('fs');
   port = port || 9100;
-  notFound = notFound || {match: /.*$/, serve: path.join(dir, 'index.html')};
+  notFound = notFound || {match: /.*$/, serve: 'index.html'};
 
   return function(options, esbuildResult) {
     /**
@@ -28,6 +28,7 @@ module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
       } else if (req.url.match(notFound.match)) {
         konsole.info('\n[bojagi serve]', 404, req.url, '->', notFound.serve );
         const notFoundServeFilePath = path.join(dir, notFound.serve);
+console.log({notFoundServeFilePath})
         const contents = fs.readFileSync(notFoundServeFilePath, {encoding: 'utf8'});
         res.end(contents);
       }

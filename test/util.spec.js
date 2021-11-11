@@ -6,7 +6,7 @@ test('util - getHtmlToInject', () => {
   }
   const result = getHtmlToInject(esbuildResult);
 
-  expect(result).toContain(`<script src="/a.js"></script>`);
-  expect(result).toContain(`<link rel="stylesheet" href="/b.css" />`);
+  expect(result).toContain(`<script src="a.js"></script>`);
+  expect(result).toContain(`<link rel="stylesheet" href="b.css" />`);
 });
 
