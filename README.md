@@ -55,9 +55,9 @@ bojagi.build(options).then(esbuildResult => {
       bundle: true,
       ...
       postBuilds: [ 
-        function(options, buildResult) { // run a websocket server
-          const wss = new WebSocketServer({ port: 8081});
-          wss.on('connection', socket => wsClients.push(socket));
+        async function(_, result) { // bundle analyzer
+          let text = await esbuild.analyzeMetafile(result.metafile, {verbose: true});
+          console.log(text);
         }
       ]
     }
