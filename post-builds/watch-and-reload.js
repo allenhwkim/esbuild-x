@@ -64,6 +64,11 @@ module.exports = function runWatchAndReload(watchDir, websocketPort = 9100) {
         fs.writeFileSync(outputFile.path, outputFile.contents);
       });
 
+      /**
+       * TODO: if file is index.html, run injectEsbuildResult again
+       *      to inject esbuild result into index.html
+       */
+
       // copy file because it's changed unless it's a part of build
       if (!esbuildResult.metafile.inputs[filePath]) { 
         const contents = require('fs').readFileSync(filePath, {encoding: 'utf8'});
