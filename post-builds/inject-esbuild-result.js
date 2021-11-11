@@ -11,8 +11,12 @@ module.exports  = function injectEsbuildResult() {
     if (!buildOptions.write) {
       fs.mkdirSync(path.join(process.cwd(), buildOptions.outdir), {recursive: true});
       buildResult.outputFiles.forEach(file => {
-        const filePath = path.join(process.cwd(), buildOptions.outdir, file.path);
-        fs.writeFileSync(filePath, file.contents) 
+        if (file.path.startsWith('/')) {
+          fs.writeFileSync(file.path, file.contents) 
+        } else {
+          const filePath = path.join(process.cwd(), buildOptions.outdir, file.path);
+          fs.writeFileSync(filePath, file.contents) 
+        }
       });
     }
 
