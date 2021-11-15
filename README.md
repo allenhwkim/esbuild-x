@@ -1,27 +1,46 @@
 # esbuild-x 
-[esbuid](https://esbuild.github.io/) extended; esbuild + pre builds + post builds
+[esbuid](https://esbuild.github.io/) extended; esbuild + pre/post builds
 
 ## Features
-* All esbuild features
-* plus, starting dev server instantly using esbuild
-* plus, supporting S.P.A with 404 fallback feature
-* plus, reloading browser when a file is updated
+* esbuild CLI available (since it's a dependency)
+* esbuild npm available (since it's a dependency)
+* plus, accepting configuration file (e.g., `esbuild.config.js`)
 * plus, accepting custom pre build functions
 * plus, accepting custom post build functions
 
-## Usage as command
+## Install
 ```
 $ npm i esbuild-x -D
+```
+
+## Usage as command
+```
+$ esbuild esbuild in.js --bundle
+$ esbuild-x --config=esbuild.config.js
 $ esbuild-x build
 $ esbuild-x serve
-$ esbuild-x <any> # any section in esbuild-x.config.js
 ```
 
 ## Usage as node module
 ```
+// esbuild as it is
+const esbuild = require('esbuild');
+esbuild.build({
+  entryPoints: ['src/main.js'],
+  entryNames: '[name]-[hash]',
+  outdir: 'dist',
+  bundle: true
+})
+
+// or esbuildX along with pre/post builds extended  
 const esbuildX = require('esbuild-x');
-esbuildX.build(options).then(esbuildResult => {
-  ...
+esbuildX.build({
+  entryPoints: ['src/main.js'],
+  entryNames: '[name]-[hash]',
+  outdir: 'dist',
+  bundle: true,
+  preBuilds: [ function() {rimraf('dist')} ], 
+  postBuilds: [ function() {console.log('done')} ]
 })
 ```
 
@@ -94,10 +113,11 @@ esbuildX.build(options).then(esbuildResult => {
 });
 ```
 
-## post builds
+## built-in post builds
 
 ### copy
 copy files to a directory by replacing file contents
+
 #### parameters
 * fromsTo: string. Accepts glob patterns. e.g., 'src/**/!(*.js) public/* dist'
 * options:
