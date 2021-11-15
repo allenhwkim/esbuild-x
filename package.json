@@ -1,6 +1,6 @@
 {
   "name": "esbuild-x",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "esbuild + post builds(copy files, inject html, run static server, and watch files)",
   "main": "lib/index.js",
   "bin": {
