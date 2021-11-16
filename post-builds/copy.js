@@ -20,11 +20,13 @@ function copyFromTo(from, to, {fs, replacements}) {
       konsole.log('[esbuild-x] creating directory', target);
     } else {
       // if match to replace, run replace
-      const replacement = replacements.find(repl => repl.match.test(file));
-      if (replacement) {
-        const contents = nodefs.readFileSync(file, 'utf8');
-        const newContents = contents.replace(replacement.find, replacement.replace);
-        fs.writeFileSync(target, newContents);
+      const repls = replacements.filter(repl => repl.match.test(file));
+      if (repls.length) {
+        let contents = nodefs.readFileSync(file, 'utf8');
+        repls.forEach(replacement => {
+          contents = contents.replace(replacement.find, replacement.replace);
+        });
+        fs.writeFileSync(target, contents);
       } else {
         fs.writeFileSync(target, nodefs.readFileSync(file));
       }
@@ -35,7 +37,11 @@ function copyFromTo(from, to, {fs, replacements}) {
 
 // copy files or directories to a given directory
 module.exports = function copy(fromTos, {replacements} = {}) {
-  replacements = replacements || [];
+  replacements = (replacements || []).concat({
+    match: /index\.html/, 
+    find: /<head([^>]*)>/, 
+    replace: `<head$1><!-- Build at:${new Date()} -->`
+  });
 
   return function copy(options={}, esbuildResult) {
     const fs = options.write ? require('fs') : require('memfs');

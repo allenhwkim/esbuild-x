@@ -25,6 +25,7 @@ test('post-builds - copy', () => {
   expect(result[`${prefix}/index.html`]).toBeTruthy();
   expect(result[`${prefix}/test.html`]).toBeTruthy();
   expect(result[`${prefix}/test.css`]).toBeTruthy();
+  expect(result[`${prefix}/index.html`]).toContain('<head><!-- Build at:');
   expect(result[`${prefix}/index.html`]).toContain('<!-- BAR -->');
 });
 

@@ -14,7 +14,7 @@ test('post-builds - runStaticServer', async () => {
   const server = runStaticServer('test/test-files', { // relative to main directory
     fs: require('fs'), 
     port: port
-  })();
+  })({});
 
   // serve test.html
   const res1 = await axios(`http://localhost:${port}/test.html`);

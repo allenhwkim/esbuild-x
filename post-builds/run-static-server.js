@@ -1,6 +1,5 @@
 const path = require('path');
 const http = require('http');
-const nodefs = require('fs');
 const { konsole } = require('../lib/util.js');
 
 // dir
@@ -8,11 +7,12 @@ const { konsole } = require('../lib/util.js');
 // - port
 // - notFound: {match: /^\/(component|tool|css)/, serve: 'dist/index.html'}
 module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
-  fs = fs || require('fs');
+  // fs = fs || require('fs');
   port = port || 9100;
-  notFound = notFound || {match: /.*$/, serve: 'index.html'};
+  notFound = notFound || {match: /\/[^\.]+$/, serve: 'index.html'};
 
   return function(options, esbuildResult) {
+    fs = fs || (options.write ? require('fs') : require('memfs'));
     /**
      * run the static server
      */
