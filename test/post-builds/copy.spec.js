@@ -11,7 +11,7 @@ test('post-builds - copy', () => {
   const replacements = [
     {match: /index\.html/, find: /FOO/, replace: 'BAR'}
   ];
-  // const excludes = [/excludes/];
+  const excludes = [/excludes/];
   // path is relative to main directory, which package.json exists
   copy('test/test-files/**/!(*.js) dist', {fs, replacements, excludes})();
 
