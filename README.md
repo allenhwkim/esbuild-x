@@ -125,6 +125,7 @@ copy files to a directory by replacing file contents
     * match: replacement happens when this regular expression match to a file path.
     * find: regular expression to search string in a file.
     * replace: string value to replace the string found.
+  * excludes: list of exclude patterns.
 
 Example
 ```
@@ -134,7 +135,8 @@ const options = {
   entryPoints: ['src/main.js']
   postBuilds: [
     copy('src/**/!(*.js) public/* dist', {
-      replacements: [ {match: /index\.html/, find: /FOO/, replace: 'BAR'} ]
+      replacements: [ {match: /index\.html/, find: /FOO/, replace: 'BAR'} ],
+      excludes: [/node_moules/]
     })
   ]
 }

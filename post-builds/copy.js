@@ -3,12 +3,15 @@ const glob = require('glob');
 const nodefs = require('fs');
 const {konsole} = require('../lib/util');
 
-function copyFromTo(from, to, {fs, replacements}) {
+function copyFromTo(from, to, {fs, replacements, excludes}) {
   const wildcard = from.indexOf('*') !== -1;
   const pattern = !wildcard && nodefs.lstatSync(from).isDirectory() ? `${from}/**/*` : from;
   const fromDirname = from.match(/\//) ? path.dirname(from.replace(/\/\*.*/, '/wildcard')) : from;
 
   glob.sync(pattern).forEach(file => {
+    const excluded = excludes.some(exclude => file.match(exclude));
+    if (excluded) return;
+    
     const target = file.replace(fromDirname, to);
     const targetDir= path.dirname(target);
     if (!fs.existsSync(targetDir)) {
@@ -36,12 +39,13 @@ function copyFromTo(from, to, {fs, replacements}) {
 }
 
 // copy files or directories to a given directory
-module.exports = function copy(fromTos, {replacements} = {}) {
+module.exports = function copy(fromTos, {replacements, excludes} = {}) {
   replacements = (replacements || []).concat({
     match: /index\.html/, 
     find: /<head([^>]*)>/, 
     replace: `<head$1><!-- Build at:${new Date()} -->`
   });
+  excludes = excludes || [];
 
   return function copy(options={}, esbuildResult) {
     const fs = options.write ? require('fs') : require('memfs');
@@ -49,7 +53,7 @@ module.exports = function copy(fromTos, {replacements} = {}) {
     fromTos.forEach(strExpr => {
       const froms = strExpr.split(' ').slice(0, -1);
       const to = strExpr.split(' ').slice(-1)[0];
-      froms.forEach( from => copyFromTo(from, to, {fs, replacements}) );
+      froms.forEach( from => copyFromTo(from, to, {fs, replacements, excludes}) );
       konsole.info(`[esbuild-x post-builds] copying files ${froms} -> ${to}`);
     })
   }
