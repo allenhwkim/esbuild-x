@@ -15,7 +15,7 @@ $ npm i esbuild-x -D
 
 ## Usage as command
 ```
-$ esbuild esbuild in.js --bundle
+$ esbuild main.js --bundle
 $ esbuild-x --config=esbuild.config.js
 $ esbuild-x build
 $ esbuild-x serve
