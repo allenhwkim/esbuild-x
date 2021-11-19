@@ -199,8 +199,8 @@ esbuildX.build(options).then(esbuildResult => {
 ```
 
 ### watchAndReload
-Watch the given directory, and rebuild and reload when a file change happens.
-It also starts a WebSocket server to reload browser client when file change happens.
+Watch the given directory, and rebuild and reload when a file change happens. 
+It also starts a WebSocket server to reload the browser client when a file change happens.
 
 Parameters: 
   * dir: a directory to watch
