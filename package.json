@@ -38,6 +38,7 @@
     "esbuild": "^0.13.4",
     "glob": "^7.2.0",
     "html-minifier": "^4.0.0",
+    "marked": "^4.0.15",
     "memfs": "^3.3.0",
     "ws": "^8.2.3",
     "yargs": "^17.2.1"
@@ -45,7 +46,6 @@
   "devDependencies": {
     "axios": "^0.24.0",
     "jest": "^27.3.1",
-    "kill-port": "^1.6.1",
-    "marked": "^4.0.15"
+    "kill-port": "^1.6.1"
   }
 }
