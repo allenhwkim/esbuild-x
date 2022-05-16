@@ -1,7 +1,6 @@
 const path = require('path');
 const glob = require('glob');
 const nodefs = require('fs');
-const {konsole} = require('../lib/util');
 
 function copyFromTo(from, to, {fs, replacements, excludes}) {
   const wildcard = from.indexOf('*') !== -1;
@@ -16,11 +15,12 @@ function copyFromTo(from, to, {fs, replacements, excludes}) {
     const targetDir= path.dirname(target);
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, {recursive: true});
-      konsole.debug('creating directory', targetDir);
+      // console.debug('creating directory', targetDir);
     } 
     if (nodefs.lstatSync(file).isDirectory()) {
       fs.mkdirSync(target, {recursive: true});
-      konsole.log('[esbuild-x] creating directory', target);
+      // console.log('[esbuild-x] creating directory', target);
+      console.log('[esbuild-x copy]', {from: file, to: target});
     } else {
       // if match to replace, run replace
       const repls = replacements.filter(repl => repl.match.test(file));
@@ -33,7 +33,7 @@ function copyFromTo(from, to, {fs, replacements, excludes}) {
       } else {
         fs.writeFileSync(target, nodefs.readFileSync(file));
       }
-      konsole.log('[esbuild-x] copying files', {from: file, to: target});
+      // console.log('[esbuild-x] copying files', {from: file, to: target});
     }
   });
 }
@@ -53,8 +53,14 @@ module.exports = function copy(fromTos, {replacements, excludes} = {}) {
     fromTos.forEach(strExpr => {
       const froms = strExpr.split(' ').slice(0, -1);
       const to = strExpr.split(' ').slice(-1)[0];
-      froms.forEach( from => copyFromTo(from, to, {fs, replacements, excludes}) );
-      konsole.info(`[esbuild-x post-builds] copying files ${froms} -> ${to}`);
+      console.info(`[esbuild-x copy] ${froms} -> ${to}`);
+      froms.forEach( from => {
+        if (!from.match(/\*/) && !nodefs.existsSync(from)) { // specified a file, but not exists
+          console.log('[esbuild-x copy] not exists', from);
+        } else {
+          copyFromTo(from, to, {fs, replacements, excludes}) 
+        }
+      });
     })
   }
 }

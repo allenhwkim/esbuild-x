@@ -15,7 +15,7 @@ test('post-builds - injectEsbuildResult', () => {
 
   // FYI, path is relative to main directory, which package.json exists
   const buildOptions = { entryPoints: 'test/test-files/main.js', outdir: 'dist' };
-  const wss = injectEsbuildResult()(buildOptions, {
+  const wss = injectEsbuildResult('test/test-files/index.html')(buildOptions, {
     outputFiles: [ {path: 'main.js', contents: 'MAIN_JS'} ] 
   });
 

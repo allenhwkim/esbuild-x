@@ -1,6 +1,13 @@
+const copy = require('./copy');
+const injectEsbuildResult  = require('./inject-esbuild-result');
+const runStaticServer  = require('./run-static-server');
+const watchAndReload = require('./watch-and-reload');
+const readmeToHtml = require('./readme-to-html');
+
 module.exports = {
-  copy: require('./copy'),
-  injectEsbuildResult: require('./inject-esbuild-result'),
-  runStaticServer: require('./run-static-server'),
-  watchAndReload: require('./watch-and-reload'),
-}
+  copy, 
+  injectEsbuildResult, 
+  runStaticServer, 
+  watchAndReload, 
+  readmeToHtml
+};

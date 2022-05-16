@@ -1,8 +1,8 @@
 const { build } = require('esbuild');
 const path = require('path');
-const {konsole} = require('../lib/util');
 
-module.exports  = function injectEsbuildResult() { 
+module.exports  = function injectEsbuildResult(srcIndexPath) { 
+  srcIndexPath ||= path.join(process.cwd(), 'src', 'index.html'); 
 
   return function(buildOptions, buildResult) {
     const fs = buildOptions.write ? require('fs') : require('memfs');
@@ -26,17 +26,20 @@ module.exports  = function injectEsbuildResult() {
     const htmlToInject = buildFileNames.map(fileName => {
         const path = fileName.split('/').slice(-1)[0];
         const ext = path.match(/\.([a-z]+)$/)[1];
-        return ext === 'js' ? `    <script src="${path}"></script>` :
-              ext === 'css' ? `    <link rel="stylesheet" href="${path}" />` : '';
-      }).join('\n');
+        return ext === 'js' ? `<script src="${path}"></script>` :
+              ext === 'css' ? `<link rel="stylesheet" href="${path}" />` : '';
+      }).join('');
       
     // update index.html
-    const indexPath = path.join(buildOptions.outdir, 'index.html');
-    const contents = fs.readFileSync(indexPath, {encoding: 'utf8'})
+    // const srcIndexPath = path.join(process.cwd(), 'src', 'index.html');
+    const outIndexPath = path.join(buildOptions.outdir, 'index.html');
+    const contents = require('fs').readFileSync(srcIndexPath, {encoding: 'utf8'})
       .replace(/<\/body>/, `${htmlToInject}\n</body>`);
-    fs.writeFileSync(indexPath, contents);
+    fs.writeFileSync(outIndexPath, contents);
 
-    konsole.info(`[esbuild-x post-builds] inject build script into ${indexPath}`);
+    console.info(`[esbuild-x inject-esbuild-results] ${htmlToInject} into ${outIndexPath}`);
+
+    return outIndexPath;
   }
 
 }

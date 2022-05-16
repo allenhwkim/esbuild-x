@@ -1,12 +1,11 @@
 const path = require('path');
 const http = require('http');
-const { konsole } = require('../lib/util.js');
 
 // dir
 // options
 // - port
 // - notFound: {match: /^\/(component|tool|css)/, serve: 'dist/index.html'}
-module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
+module.exports = function runStaticServer(dir, {fs, port, notFound, open}={}) {
   // fs = fs || require('fs');
   port = port || 9100;
   notFound = notFound || {match: /\/[^\.]+$/, serve: 'index.html'};
@@ -26,14 +25,18 @@ module.exports = function runStaticServer(dir, {fs, port, notFound}={}) {
         const contents = fs.readFileSync(filePath);
         res.end(contents);
       } else if (req.url.match(notFound.match)) {
-        konsole.info('\n[esbuild-x serve]', 404, req.url, '->', notFound.serve );
+        // console.info('\n[esbuild-x serve]', 404, req.url, '->', notFound.serve ); // too much output when run cypress test
         const notFoundServeFilePath = path.join(dir, notFound.serve);
         const contents = fs.readFileSync(notFoundServeFilePath, {encoding: 'utf8'});
         res.end(contents);
       }
     });
     server.listen(port);
-    konsole.info(`[esbuild-x post-builds] http static server running, http://localhost:${port}`);
+    console.info(`[esbuild-x run-static-server] http static server running, http://localhost:${port}`);
+
+    if (open) {
+      require('open')(`http://localhost:${port}`);
+    }
     return server;
   };
 }

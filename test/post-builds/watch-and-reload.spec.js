@@ -25,8 +25,8 @@ test('post-builds - watchAndReload', done => {
     loader: {'.css': 'text', '.html': 'text'},
     entryPoints: ['test/test-files/main.js']
   };
-  const {watcher} = watchAndReload(watchDir, null)(buildOptions);
   require('memfs').mkdirSync('dist', {recursive: true});
+  const {watcher} = watchAndReload(watchDir, null, 'test/test-files/index.html')(buildOptions);
 
   setTimeout(_ => { // to avoid initial changes detection
     const filename = 'test/test-files/index.html';
@@ -58,13 +58,14 @@ test('post-builds - watch and reload - websocket', done => {
   fs.mkdirSync('dist', {recursive: true});
   fs.writeFileSync( 'dist/index.html', `<html><head></head><body></body></html>`);
 
-  const {watcher, wss}  = watchAndReload(watchDir, wsPort, fs)(buildOptions);
+  const {watcher, wss}  = watchAndReload(watchDir, wsPort, 'test/test-files/index.html')(buildOptions);
   setTimeout(_ => { // to avoid initial changes detection
     // then verify the result
     const result = vol.toJSON();
     const outPath = path.resolve(path.join('dist', 'index.html'));
     expect(result[outPath]).toContain(`ws://localhost:${wsPort}`);
-    expect(result[outPath]).toContain('ws.onmessage = e => window.location.reload()');
+    expect(result[outPath]).toContain('ws.onmessage = e =>');
+    expect(result[outPath]).toContain('window.location.reload();');
 
     expect(wsClients.length).toBe(0);
     const ws = new WebSocket(`ws://localhost:${wsPort}`); // a websocket client
